@@ -428,7 +428,7 @@ FieldOffice::~FieldOffice()
 void FieldOffice::morningStandUp()
 {
     katastrophe.callClient("The Owner", patrick);
-    std::cout << "The morning standup is over, the PM is called the owner." << std::endl;
+    std::cout << "The morning standup is over, the PM has called the owner." << std::endl;
 }
 
 void FieldOffice::shutDownForTheDay()
@@ -492,10 +492,12 @@ int main()
     newCoil.changeTemperature(80);
 
     Apartment hollywoodApartment;
+    
     hollywoodApartment.makeItCozy();
     hollywoodApartment.swatABug();
 
     FieldOffice shorelineFieldOffice;
+    
     shorelineFieldOffice.morningStandUp();
     shorelineFieldOffice.shutDownForTheDay();
     
