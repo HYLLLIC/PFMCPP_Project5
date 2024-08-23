@@ -70,18 +70,287 @@ write 3 UDTs below that EACH have:
  You will use those in Part 3 of this project.
 
  */
-
+#include <iostream>
 /*
  copied UDT 1:
  */
+struct CorporateOffice
+{
+    int numberOfEmployees;
+    int numberOfElevators;
+    float averageSalary;
+    float temperatureSetting;
+    std::string address;
 
+    CorporateOffice();
+    ~CorporateOffice();
+
+    struct Employee
+    {
+        std::string name;
+        std::string jobTitle;
+        std::string department;
+        float salary;
+        int timeAtCompany;
+
+        Employee();
+        ~Employee();
+
+        void clockIn(double timeIn);
+        void clockOut(double timeOut);
+        void makeCopies(int numCopies);
+        float negotiateRaise(float raiseAmount);
+    };
+
+    void callClient(std::string clientName, Employee employee);
+    void releasePayroll(Employee employeeOne, Employee employeeTwo);
+    void callSecurity(Employee securityGuard);
+};
+
+CorporateOffice::CorporateOffice() :
+numberOfEmployees(100),
+numberOfElevators(2),
+averageSalary(70000.f),
+temperatureSetting(70.f),
+address("4321 Main St")
+{
+    std::cout << "The new corporate office is ready for business!" << std::endl;
+}
+
+CorporateOffice::~CorporateOffice()
+{
+    std::cout << "The corporate office is closed!" << std::endl;
+}
+
+CorporateOffice::Employee::Employee() :
+name("John Doe"),
+jobTitle("Staff"),
+department("Administration"),
+salary(50000.f),
+timeAtCompany(1)
+{
+    std::cout << "Welcome to the family, " << name << " as the new Emplyee!" << std::endl;
+}
+
+CorporateOffice::Employee::~Employee()
+{
+    std::cout << "The employee has been fired." << std::endl;
+}
+
+void CorporateOffice::Employee::clockIn(double timeIn)
+{
+    std::cout << "Welcome, " << name <<  " it is " << timeIn << "AM" << std::endl;
+}
+
+void CorporateOffice::Employee::clockOut(double timeOut)
+{
+    std::cout << "Goodbye, it's " << timeOut << "PM" << std::endl;
+}
+
+void CorporateOffice::Employee::makeCopies(int numCopies)
+{
+    std::cout << "Now printing " << numCopies << " copies for the " << department << " meeting." << std::endl;
+}
+
+void CorporateOffice::callClient(std::string clientName, Employee employee)
+{
+    std::cout << "Now " << employee.name << " is calling " << clientName << std::endl;
+}
+
+void CorporateOffice::releasePayroll(Employee employeeOne, Employee employeeTwo)
+{
+    employeeOne.salary += 4000.f;
+    employeeTwo.salary += 4000.f;
+}
+
+void CorporateOffice::callSecurity(Employee securityGuard)
+{
+    securityGuard.name = "THE BOSS, NOW";
+}
+
+float CorporateOffice::Employee::negotiateRaise(float raiseAmount)
+{
+    float newSalary(salary);
+    while (newSalary < salary + raiseAmount)
+    {
+        newSalary+=(raiseAmount*.25f);
+        std::cout << name << " says, how about: " << newSalary << std::endl;
+    }
+    std::cout << "Fine! Get out of my office!" << std::endl;
+    return newSalary;
+}
 /*
  copied UDT 2:
  */
+struct PhoneBook
+{
+    int numberOfPages;
+    float bookWeight;
+    std::string telephoneCompany;
+    float bookAge;
+    float glueStrength;
 
+    PhoneBook();
+    ~PhoneBook();
+
+    std::string contactInformationDiplay(std::string contactName);
+    void openToRandomPage();
+    void disintigrate();
+    int tearOutPages();
+};
+
+PhoneBook::PhoneBook() :
+numberOfPages(1000),
+bookWeight(2.2f),
+telephoneCompany("Yellowpages"),
+bookAge(3.1f),
+glueStrength(1.7f)
+{
+    std::cout << "Delivering new Phonebook!" << std::endl;
+}
+
+PhoneBook::~PhoneBook()
+{
+    std::cout << "The Phonebook has been thrown away." << std::endl;
+}
+
+std::string PhoneBook::contactInformationDiplay(std::string contactName)
+{
+    std::string phoneNumber = contactName + " 555-5555";
+    return phoneNumber;
+}
+
+void PhoneBook::openToRandomPage()
+{
+    int min = 1;
+    int max = numberOfPages;
+    int randomNumber = rand() % (max - min + 1) + min;
+    std::cout << "Opening page, out of " << numberOfPages << " pages, we open to "<< randomNumber << std::endl;
+}
+
+void PhoneBook::disintigrate()
+{
+    std::cout << "Uahghghgllll the " << telephoneCompany << " phone book is disintigrating" << std::endl;
+}
+
+int PhoneBook::tearOutPages()
+{
+    int pagesTorn = 0;
+    while (pagesTorn < numberOfPages)
+    {
+        int pagesToTear = (numberOfPages - pagesTorn) / 2 + 25;
+        if (pagesTorn + pagesToTear > numberOfPages) 
+        {
+            pagesTorn = numberOfPages; 
+        }
+        {
+            pagesTorn += pagesToTear;
+            std::cout << "Tearing out " << pagesToTear << " pages." << std::endl;
+        }
+    }
+    return numberOfPages;
+}
 /*
  copied UDT 3:
  */
+struct ElectricHeater
+{
+    float wattage = 1500.f;
+    int numberOfSettings = 3;
+    int temperatureSetting;
+    char pivotMode = 'A';
+    bool powerSavingMode = true;
+
+    ElectricHeater();
+    ~ElectricHeater();
+
+    struct HeatingElement
+    {
+        HeatingElement();
+        ~HeatingElement();
+
+        int resistance = 10;
+        int voltage = 120;
+        float elementLength = 24.0f;
+        std::string supportType = "Embedded";
+        std::string layoutType = "Open Coil";
+
+        void slowCoolDown(int coolDownTime = 10);
+        void slowHeatUp(int heatUpTime = 10);
+        void changeTemperature(int newTemperature);
+    };
+
+    void produceHeat();
+    void triggerCountdownTimer(float tippingMovement);
+    int displayCurrentTemperature();
+    void setPhonebookOnFire(PhoneBook phoneBookToBurn);
+};
+
+ElectricHeater::ElectricHeater() :
+temperatureSetting(72)
+{
+    std::cout << "Firing up new heater!" << std::endl;
+}
+
+ElectricHeater::~ElectricHeater()
+{
+    std::cout << "The electric heater has been turned off." << std::endl;
+}
+
+ElectricHeater::HeatingElement::HeatingElement()
+{
+    std::cout << "New heating element added!" << std::endl;
+}
+
+ElectricHeater::HeatingElement::~HeatingElement()
+{
+    std::cout << "The heating element has been removed." << std::endl;
+}
+
+void ElectricHeater::HeatingElement::slowCoolDown(int coolDownTime)
+{
+    std::cout << "It's time to cool down, it will take " << layoutType << " coil " << coolDownTime << "seconds to cool down." << std::endl;
+}
+
+void ElectricHeater::HeatingElement::slowHeatUp(int heatUpTime)
+{
+    std::cout << "It's time to heat up, it will take " << heatUpTime << "seconds" << std::endl;
+}
+
+void ElectricHeater::HeatingElement::changeTemperature(int newTemperature)
+{
+    voltage = 0;
+    std::cout << "Haha gotcha, you wanted " << newTemperature << std::endl;
+}
+
+void ElectricHeater::produceHeat()
+{
+    powerSavingMode = false;
+    std::cout << "Now producing heat, temperature setting is " << temperatureSetting << std::endl;
+}
+
+void ElectricHeater::triggerCountdownTimer(float tippingMovement)
+{
+    if (tippingMovement > 0.5f)
+    {
+        powerSavingMode = true;
+    }
+}
+
+int ElectricHeater::displayCurrentTemperature()
+{
+    std::cout << "Current temperature is " << temperatureSetting << std::endl;
+    return temperatureSetting;
+}
+
+void ElectricHeater::setPhonebookOnFire(PhoneBook phoneBookToBurn)
+{
+    phoneBookToBurn.numberOfPages = 8;
+    for (; phoneBookToBurn.numberOfPages > 0; --phoneBookToBurn.numberOfPages)
+    {
+        std::cout << "Burning page " << phoneBookToBurn.numberOfPages << std::endl;
+    }
+}
 
 /*
  new UDT 4:
