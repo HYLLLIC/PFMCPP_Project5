@@ -351,17 +351,91 @@ void ElectricHeater::setPhonebookOnFire(PhoneBook phoneBookToBurn)
         std::cout << "Burning page " << phoneBookToBurn.numberOfPages << std::endl;
     }
 }
-
 /*
  new UDT 4:
  with 2 member functions
  */
+struct Apartment
+{
+    ElectricHeater spaceHeater;
+    PhoneBook trustyPhoneBook;
+    CorporateOffice::Employee rachel;
 
+    Apartment();
+    ~Apartment();
+
+    void makeItCozy();
+    void swatABug();
+};
+
+Apartment::Apartment()
+{
+    rachel.negotiateRaise(5000.f);
+    std::cout << "Rachel can move in now that she makes $" << rachel.salary << std::endl;
+}
+
+Apartment::~Apartment()
+{
+    spaceHeater.setPhonebookOnFire(trustyPhoneBook);
+    std::cout << "Oh no! After the fire, Rachel must move out!" << std::endl;
+}
+
+void Apartment::makeItCozy()
+{
+    spaceHeater.temperatureSetting = 80;
+    spaceHeater.produceHeat();
+    rachel.jobTitle = "Bug in a rug";
+    std::cout << "The apartment is toasty at " << spaceHeater.temperatureSetting << std::endl;
+}
+
+void Apartment::swatABug()
+{
+    rachel.department = "Pest Control";
+    rachel.jobTitle = "Death, Destroyer of Bugs";
+    trustyPhoneBook.disintigrate();
+    std::cout << "The phone book was lost, but I have become " << rachel.jobTitle << std::endl;
+}
 /*
  new UDT 5:
  with 2 member functions
  */
+struct FieldOffice
+{
+    CorporateOffice katastrophe;
+    CorporateOffice::Employee patrick;
+    ElectricHeater rentalHeater;
 
+    FieldOffice();
+    ~FieldOffice();
+
+    void morningStandUp();
+    void shutDownForTheDay();
+};
+
+FieldOffice::FieldOffice()
+{
+    ++katastrophe.numberOfEmployees;
+    patrick.jobTitle = "Project Manager";
+    std::cout << "A new employee has opened a field office, there are now " << katastrophe.numberOfEmployees << " employees." << std::endl;
+}
+
+FieldOffice::~FieldOffice()
+{
+    katastrophe.numberOfEmployees = 2;
+    std::cout << "The field office has been closed, but there are still " << katastrophe.numberOfEmployees << " employees left." << std::endl;
+}
+
+void FieldOffice::morningStandUp()
+{
+    katastrophe.callClient("The Owner", patrick);
+    std::cout << "The morning standup is over, the PM is called the owner." << std::endl;
+}
+
+void FieldOffice::shutDownForTheDay()
+{
+    patrick.clockOut(19.00);
+    std::cout << "The day is over, Patrick the PM has clocked out." << std::endl;
+}
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
 
