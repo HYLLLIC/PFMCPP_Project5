@@ -453,5 +453,52 @@ void FieldOffice::shutDownForTheDay()
 #include <iostream>
 int main()
 {
+    CorporateOffice orphanCrushingMachineInc;
+
+    CorporateOffice::Employee jackie;
+
+    jackie.name = "Jackie";
+    jackie.clockIn(9.0);
+    jackie.clockOut(17.0);
+    jackie.makeCopies(20);
+    jackie.negotiateRaise(5000);
+
+    orphanCrushingMachineInc.callClient("HYLLLIC", jackie);
+    orphanCrushingMachineInc.releasePayroll(jackie, jackie);
+    orphanCrushingMachineInc.callSecurity(jackie);
+
+    std::cout << "Welcome " << jackie.name << "! Please report to " << jackie.department << std::endl;
+
+    std::cout << "Boy, those " << jackie.salary << " dollars are gonna be a lot of money! " << std::endl;
+
+    PhoneBook olYellowPages;
+
+    olYellowPages.contactInformationDiplay("HYLLLIC INC");
+    olYellowPages.openToRandomPage();
+    olYellowPages.disintigrate();
+    olYellowPages.tearOutPages();
+
+    ElectricHeater heater;
+
+    heater.produceHeat();
+    heater.triggerCountdownTimer(0.5f);
+    heater.displayCurrentTemperature();
+    heater.setPhonebookOnFire(olYellowPages);
+
+    ElectricHeater::HeatingElement newCoil;
+
+    newCoil.slowCoolDown(10);
+    newCoil.slowHeatUp(10);
+    newCoil.changeTemperature(80);
+
+    Apartment hollywoodApartment;
+    hollywoodApartment.makeItCozy();
+    hollywoodApartment.swatABug();
+
+    FieldOffice shorelineFieldOffice;
+    shorelineFieldOffice.morningStandUp();
+    shorelineFieldOffice.shutDownForTheDay();
+    
+    //==============================
     std::cout << "good to go!" << std::endl;
 }
