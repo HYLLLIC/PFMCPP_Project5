@@ -101,10 +101,11 @@ struct CorporateOffice
         Employee();
         ~Employee();
 
-        void clockIn(double timeIn);
-        void clockOut(double timeOut);
+        double clockIn(double timeIn);
+        double clockOut(double timeOut);
         void makeCopies(int numCopies);
         float negotiateRaise(float raiseAmount);
+        void firstDayExcitement();
     };
 
     void callClient(std::string clientName, Employee employee);
@@ -142,14 +143,16 @@ CorporateOffice::Employee::~Employee()
     std::cout << "The employee has been fired." << std::endl;
 }
 
-void CorporateOffice::Employee::clockIn(double timeIn)
+double CorporateOffice::Employee::clockIn(double timeIn)
 {
     std::cout << "Welcome, " << name <<  " it is " << timeIn << "AM" << std::endl;
+    return timeIn;
 }
 
-void CorporateOffice::Employee::clockOut(double timeOut)
+double CorporateOffice::Employee::clockOut(double timeOut)
 {
-    std::cout << "Goodbye, it's " << timeOut << "PM" << std::endl;
+    //std::cout << "Goodbye, it's " << timeOut << "PM" << std::endl;
+    return timeOut;
 }
 
 void CorporateOffice::Employee::makeCopies(int numCopies)
@@ -371,6 +374,7 @@ struct Apartment
 
     void makeItCozy();
     void swatABug();
+    void sleepPowerSavingMode();
 };
 
 Apartment::Apartment()
@@ -415,6 +419,7 @@ struct FieldOffice
 
     void morningStandUp();
     void shutDownForTheDay();
+    void newFieldOfficeAddress(std::string newAddress);
 };
 
 FieldOffice::FieldOffice()
@@ -500,11 +505,15 @@ int main()
     
     hollywoodApartment.makeItCozy();
     hollywoodApartment.swatABug();
+    
+    std::cout << "Later that night, after logging off at " << hollywoodApartment.rachel.clockOut(7.00) << " power saving mode was made " << std::boolalpha << (hollywoodApartment.spaceHeater.powerSavingMode = true) << std::endl;
 
     FieldOffice shorelineFieldOffice;
     
     shorelineFieldOffice.morningStandUp();
     shorelineFieldOffice.shutDownForTheDay();
+
+    std::cout << "The field office is located at " << (shorelineFieldOffice.katastrophe.address = "123 Middle of Nowhere") << std::endl;
     
     //==============================
     std::cout << "good to go!" << std::endl;
