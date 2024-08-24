@@ -187,6 +187,11 @@ float CorporateOffice::Employee::negotiateRaise(float raiseAmount)
     std::cout << "Fine! Get out of my office!" << std::endl;
     return newSalary;
 }
+
+void CorporateOffice::Employee::firstDayExcitement()
+{
+    std::cout << "Welcome " << this->name << "! Please report to " << this->department << ". Boy, those " << this->salary << " dollars are gonna be a lot of money! " << std::endl;
+}
 /*
  copied UDT 2:
  */
@@ -404,6 +409,11 @@ void Apartment::swatABug()
     trustyPhoneBook.disintigrate();
     std::cout << "The phone book was lost, but I have become " << rachel.jobTitle << std::endl;
 }
+
+void Apartment::sleepPowerSavingMode()
+{
+    std::cout << "Later that night, after logging off at " << this->rachel.clockOut(7.00) << " power saving mode was made " << std::boolalpha << (this->spaceHeater.powerSavingMode = true) << std::endl;
+}
 /*
  new UDT 5:
  with 2 member functions
@@ -446,6 +456,12 @@ void FieldOffice::shutDownForTheDay()
     patrick.clockOut(19.00);
     std::cout << "The day is over, Patrick the PM has clocked out." << std::endl;
 }
+
+void FieldOffice::newFieldOfficeAddress(std::string newAddress)
+{
+    this->katastrophe.address = newAddress;
+    std::cout << "The field office is located at " << newAddress << std::endl;
+}
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
 
@@ -477,9 +493,9 @@ int main()
     orphanCrushingMachineInc.releasePayroll(jackie, jackie);
     orphanCrushingMachineInc.callSecurity(jackie);
 
-    std::cout << "Welcome " << jackie.name << "! Please report to " << jackie.department << std::endl;
+    std::cout << "Welcome " << jackie.name << "! Please report to " << jackie.department << ". Boy, those " << jackie.salary << " dollars are gonna be a lot of money! " << std::endl;
 
-    std::cout << "Boy, those " << jackie.salary << " dollars are gonna be a lot of money! " << std::endl;
+    jackie.firstDayExcitement();
 
     PhoneBook olYellowPages;
 
@@ -508,12 +524,16 @@ int main()
     
     std::cout << "Later that night, after logging off at " << hollywoodApartment.rachel.clockOut(7.00) << " power saving mode was made " << std::boolalpha << (hollywoodApartment.spaceHeater.powerSavingMode = true) << std::endl;
 
+    hollywoodApartment.sleepPowerSavingMode();
+
     FieldOffice shorelineFieldOffice;
     
     shorelineFieldOffice.morningStandUp();
     shorelineFieldOffice.shutDownForTheDay();
 
     std::cout << "The field office is located at " << (shorelineFieldOffice.katastrophe.address = "123 Middle of Nowhere") << std::endl;
+
+    shorelineFieldOffice.newFieldOfficeAddress("123 Middle of Nowhere");
     
     //==============================
     std::cout << "good to go!" << std::endl;
