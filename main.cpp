@@ -101,10 +101,11 @@ struct CorporateOffice
         Employee();
         ~Employee();
 
-        void clockIn(double timeIn);
-        void clockOut(double timeOut);
+        double clockIn(double timeIn);
+        double clockOut(double timeOut);
         void makeCopies(int numCopies);
         float negotiateRaise(float raiseAmount);
+        void reportToFirstDay();
     };
 
     void callClient(std::string clientName, Employee employee);
@@ -142,14 +143,16 @@ CorporateOffice::Employee::~Employee()
     std::cout << "The employee has been fired." << std::endl;
 }
 
-void CorporateOffice::Employee::clockIn(double timeIn)
+double CorporateOffice::Employee::clockIn(double timeIn)
 {
     std::cout << "Welcome, " << name <<  " it is " << timeIn << "AM" << std::endl;
+    return timeIn;
 }
 
-void CorporateOffice::Employee::clockOut(double timeOut)
+double CorporateOffice::Employee::clockOut(double timeOut)
 {
-    std::cout << "Goodbye, it's " << timeOut << "PM" << std::endl;
+    //std::cout << "Goodbye, it's " << timeOut << "PM" << std::endl;
+    return timeOut;
 }
 
 void CorporateOffice::Employee::makeCopies(int numCopies)
@@ -183,6 +186,11 @@ float CorporateOffice::Employee::negotiateRaise(float raiseAmount)
     }
     std::cout << "Fine! Get out of my office!" << std::endl;
     return newSalary;
+}
+
+void CorporateOffice::Employee::reportToFirstDay()
+{
+    std::cout << "Welcome " << this->name << "! Please report to " << this->department << ". Boy, those " << this->salary << " dollars are gonna be a lot of money! " << std::endl;
 }
 /*
  copied UDT 2:
@@ -369,8 +377,9 @@ struct Apartment
     Apartment();
     ~Apartment();
 
-    void makeItCozy();
-    void swatABug();
+    void makeApartmentCozy();
+    void swatABugAndRant();
+    void logOffAndShutDown();
 };
 
 Apartment::Apartment()
@@ -385,7 +394,7 @@ Apartment::~Apartment()
     std::cout << "Oh no! After the fire, Rachel must move out!" << std::endl;
 }
 
-void Apartment::makeItCozy()
+void Apartment::makeApartmentCozy()
 {
     spaceHeater.temperatureSetting = 80;
     spaceHeater.produceHeat();
@@ -393,12 +402,17 @@ void Apartment::makeItCozy()
     std::cout << "The apartment is toasty at " << spaceHeater.temperatureSetting << std::endl;
 }
 
-void Apartment::swatABug()
+void Apartment::swatABugAndRant()
 {
     rachel.department = "Pest Control";
     rachel.jobTitle = "Death, Destroyer of Bugs";
     trustyPhoneBook.disintigrate();
     std::cout << "The phone book was lost, but I have become " << rachel.jobTitle << std::endl;
+}
+
+void Apartment::logOffAndShutDown()
+{
+    std::cout << "Later that night, after logging off at " << this->rachel.clockOut(7.00) << " power saving mode was made " << std::boolalpha << (this->spaceHeater.powerSavingMode = true) << std::endl;
 }
 /*
  new UDT 5:
@@ -413,8 +427,9 @@ struct FieldOffice
     FieldOffice();
     ~FieldOffice();
 
-    void morningStandUp();
-    void shutDownForTheDay();
+    void meetWithOwner();
+    void wrapUpWorkDay();
+    void defineFieldOfficeAddress(std::string newAddress);
 };
 
 FieldOffice::FieldOffice()
@@ -430,16 +445,22 @@ FieldOffice::~FieldOffice()
     std::cout << "The field office has been closed, but there are still " << katastrophe.numberOfEmployees << " employees left." << std::endl;
 }
 
-void FieldOffice::morningStandUp()
+void FieldOffice::meetWithOwner()
 {
     katastrophe.callClient("The Owner", patrick);
     std::cout << "The morning standup is over, the PM has called the owner." << std::endl;
 }
 
-void FieldOffice::shutDownForTheDay()
+void FieldOffice::wrapUpWorkDay()
 {
     patrick.clockOut(19.00);
     std::cout << "The day is over, Patrick the PM has clocked out." << std::endl;
+}
+
+void FieldOffice::defineFieldOfficeAddress(std::string newAddress)
+{
+    this->katastrophe.address = newAddress;
+    std::cout << "The field office is located at " << newAddress << std::endl;
 }
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
@@ -472,9 +493,9 @@ int main()
     orphanCrushingMachineInc.releasePayroll(jackie, jackie);
     orphanCrushingMachineInc.callSecurity(jackie);
 
-    std::cout << "Welcome " << jackie.name << "! Please report to " << jackie.department << std::endl;
+    std::cout << "Welcome " << jackie.name << "! Please report to " << jackie.department << ". Boy, those " << jackie.salary << " dollars are gonna be a lot of money! " << std::endl;
 
-    std::cout << "Boy, those " << jackie.salary << " dollars are gonna be a lot of money! " << std::endl;
+    jackie.reportToFirstDay();
 
     PhoneBook olYellowPages;
 
@@ -498,13 +519,21 @@ int main()
 
     Apartment hollywoodApartment;
     
-    hollywoodApartment.makeItCozy();
-    hollywoodApartment.swatABug();
+    hollywoodApartment.makeApartmentCozy();
+    hollywoodApartment.swatABugAndRant();
+    
+    std::cout << "Later that night, after logging off at " << hollywoodApartment.rachel.clockOut(7.00) << " power saving mode was made " << std::boolalpha << (hollywoodApartment.spaceHeater.powerSavingMode = true) << std::endl;
+
+    hollywoodApartment.logOffAndShutDown();
 
     FieldOffice shorelineFieldOffice;
     
-    shorelineFieldOffice.morningStandUp();
-    shorelineFieldOffice.shutDownForTheDay();
+    shorelineFieldOffice.meetWithOwner();
+    shorelineFieldOffice.wrapUpWorkDay();
+
+    std::cout << "The field office is located at " << (shorelineFieldOffice.katastrophe.address = "123 Middle of Nowhere") << std::endl;
+
+    shorelineFieldOffice.defineFieldOfficeAddress("123 Middle of Nowhere");
     
     //==============================
     std::cout << "good to go!" << std::endl;
