@@ -106,11 +106,11 @@ struct CorporateOffice
         Employee();
         ~Employee();
 
-        double clockIn(double timeIn);
-        double clockOut(double timeOut);
-        void makeCopies(int numCopies);
+        double clockIn(double timeIn) const;
+        double clockOut(double timeOut) const;
+        void makeCopies(int numCopies) const;
         float negotiateRaise(float raiseAmount);
-        void reportToFirstDay();
+        void reportToFirstDay() const;
     };
 
     void callClient(std::string clientName, const Employee& employee) const;
@@ -150,19 +150,19 @@ CorporateOffice::Employee::~Employee()
     std::cout << "The employee has been fired." << std::endl;
 }
 
-double CorporateOffice::Employee::clockIn(double timeIn)
+double CorporateOffice::Employee::clockIn(double timeIn) const
 {
     std::cout << "Welcome, " << name <<  " it is " << timeIn << "AM" << std::endl;
     return timeIn;
 }
 
-double CorporateOffice::Employee::clockOut(double timeOut)
+double CorporateOffice::Employee::clockOut(double timeOut) const
 {
     //std::cout << "Goodbye, it's " << timeOut << "PM" << std::endl;
     return timeOut;
 }
 
-void CorporateOffice::Employee::makeCopies(int numCopies)
+void CorporateOffice::Employee::makeCopies(int numCopies) const
 {
     std::cout << "Now printing " << numCopies << " copies for the " << department << " meeting." << std::endl;
 }
@@ -192,10 +192,11 @@ float CorporateOffice::Employee::negotiateRaise(float raiseAmount)
         std::cout << name << " says, how about: " << newSalary << std::endl;
     }
     std::cout << "Fine! Get out of my office!" << std::endl;
+    salary = newSalary;
     return newSalary;
 }
 
-void CorporateOffice::Employee::reportToFirstDay()
+void CorporateOffice::Employee::reportToFirstDay() const
 {
     std::cout << "Welcome " << this->name << "! Please report to " << this->department << ". Boy, those " << this->salary << " dollars are gonna be a lot of money! " << std::endl;
 }
@@ -227,8 +228,8 @@ struct PhoneBook
     PhoneBook();
     ~PhoneBook();
 
-    std::string contactInformationDiplay(std::string contactName);
-    void openToRandomPage();
+    std::string contactInformationDiplay(std::string contactName) const;
+    void openToRandomPage() const;
     void disintigrate();
     int tearOutPages();
 
@@ -250,13 +251,13 @@ PhoneBook::~PhoneBook()
     std::cout << "The Phonebook has been thrown away." << std::endl;
 }
 
-std::string PhoneBook::contactInformationDiplay(std::string contactName)
+std::string PhoneBook::contactInformationDiplay(std::string contactName) const
 {
     std::string phoneNumber = contactName + " 555-5555";
     return phoneNumber;
 }
 
-void PhoneBook::openToRandomPage()
+void PhoneBook::openToRandomPage() const
 {
     int min = 1;
     int max = numberOfPages;
@@ -267,6 +268,7 @@ void PhoneBook::openToRandomPage()
 void PhoneBook::disintigrate()
 {
     std::cout << "Uahghghgllll the " << telephoneCompany << " phone book is disintigrating" << std::endl;
+    numberOfPages = 0;
 }
 
 int PhoneBook::tearOutPages()
@@ -284,6 +286,7 @@ int PhoneBook::tearOutPages()
             std::cout << "Tearing out " << pagesToTear << " pages." << std::endl;
         }
     }
+    numberOfPages -= pagesTorn;
     return numberOfPages;
 }
 
@@ -325,14 +328,14 @@ struct ElectricHeater
         std::string supportType = "Embedded";
         std::string layoutType = "Open Coil";
 
-        void slowCoolDown(int coolDownTime = 10);
-        void slowHeatUp(int heatUpTime = 10);
+        void slowCoolDown(int coolDownTime = 10) const;
+        void slowHeatUp(int heatUpTime = 10) const;
         void changeTemperature(int newTemperature);
     };
 
     void produceHeat();
     void triggerCountdownTimer(float tippingMovement);
-    int displayCurrentTemperature();
+    int displayCurrentTemperature() const;
     void setPhonebookOnFire(PhoneBook& phoneBookToBurn);
 
     JUCE_LEAK_DETECTOR(ElectricHeater)
@@ -359,12 +362,12 @@ ElectricHeater::HeatingElement::~HeatingElement()
     std::cout << "The heating element has been removed." << std::endl;
 }
 
-void ElectricHeater::HeatingElement::slowCoolDown(int coolDownTime)
+void ElectricHeater::HeatingElement::slowCoolDown(int coolDownTime) const
 {
     std::cout << "It's time to cool down, it will take " << layoutType << " coil " << coolDownTime << "seconds to cool down." << std::endl;
 }
 
-void ElectricHeater::HeatingElement::slowHeatUp(int heatUpTime)
+void ElectricHeater::HeatingElement::slowHeatUp(int heatUpTime) const
 {
     std::cout << "It's time to heat up, it will take " << heatUpTime << "seconds" << std::endl;
 }
@@ -389,7 +392,7 @@ void ElectricHeater::triggerCountdownTimer(float tippingMovement)
     }
 }
 
-int ElectricHeater::displayCurrentTemperature()
+int ElectricHeater::displayCurrentTemperature() const
 {
     std::cout << "Current temperature is " << temperatureSetting << std::endl;
     return temperatureSetting;
@@ -496,8 +499,8 @@ struct FieldOffice
     FieldOffice();
     ~FieldOffice();
 
-    void meetWithOwner();
-    void wrapUpWorkDay();
+    void meetWithOwner() const;
+    void wrapUpWorkDay() const;
     void defineFieldOfficeAddress(std::string newAddress);
 
     JUCE_LEAK_DETECTOR(FieldOffice)
@@ -516,13 +519,13 @@ FieldOffice::~FieldOffice()
     std::cout << "The field office has been closed, but there are still " << katastrophe.numberOfEmployees << " employees left." << std::endl;
 }
 
-void FieldOffice::meetWithOwner()
+void FieldOffice::meetWithOwner() const
 {
     katastrophe.callClient("The Owner", patrick);
     std::cout << "The morning standup is over, the PM has called the owner." << std::endl;
 }
 
-void FieldOffice::wrapUpWorkDay()
+void FieldOffice::wrapUpWorkDay() const
 {
     patrick.clockOut(19.00);
     std::cout << "The day is over, Patrick the PM has clocked out." << std::endl;
