@@ -80,6 +80,7 @@ void Axe::aConstMemberFunction() const { }
 
 
 #include <iostream>
+#include "LeakedObjectDetector.h"
 /*
  copied UDT 1:
  */
@@ -110,11 +111,13 @@ struct CorporateOffice
         void makeCopies(int numCopies);
         float negotiateRaise(float raiseAmount);
         void reportToFirstDay();
+        JUCE_LEAK_DETECTOR(Employee)
     };
 
     void callClient(std::string clientName, Employee employee);
     void releasePayroll(Employee employeeOne, Employee employeeTwo);
     void callSecurity(Employee securityGuard);
+    JUCE_LEAK_DETECTOR(CorporateOffice)
 };
 
 CorporateOffice::CorporateOffice() :
@@ -214,6 +217,7 @@ struct PhoneBook
     void openToRandomPage();
     void disintigrate();
     int tearOutPages();
+    JUCE_LEAK_DETECTOR(PhoneBook)
 };
 
 PhoneBook::PhoneBook() :
@@ -295,12 +299,14 @@ struct ElectricHeater
         void slowCoolDown(int coolDownTime = 10);
         void slowHeatUp(int heatUpTime = 10);
         void changeTemperature(int newTemperature);
+        JUCE_LEAK_DETECTOR(HeatingElement)
     };
 
     void produceHeat();
     void triggerCountdownTimer(float tippingMovement);
     int displayCurrentTemperature();
     void setPhonebookOnFire(PhoneBook phoneBookToBurn);
+    JUCE_LEAK_DETECTOR(ElectricHeater)
 };
 
 ElectricHeater::ElectricHeater() :
@@ -384,6 +390,7 @@ struct Apartment
     void makeApartmentCozy();
     void swatABugAndRant();
     void logOffAndShutDown();
+    JUCE_LEAK_DETECTOR(Apartment)
 };
 
 Apartment::Apartment()
@@ -434,6 +441,7 @@ struct FieldOffice
     void meetWithOwner();
     void wrapUpWorkDay();
     void defineFieldOfficeAddress(std::string newAddress);
+    JUCE_LEAK_DETECTOR(FieldOffice)
 };
 
 FieldOffice::FieldOffice()
