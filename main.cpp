@@ -567,7 +567,7 @@ struct FieldOfficeWrapper
 #include <iostream>
 int main()
 {
-    CorporateOffice orphanCrushingMachineInc;
+    CorporateOfficeWrapper orphanCrushingMachineInc( new CorporateOffice() );
 
     CorporateOffice::Employee jackie;
 
@@ -577,27 +577,27 @@ int main()
     jackie.makeCopies(20);
     jackie.negotiateRaise(5000);
 
-    orphanCrushingMachineInc.callClient("HYLLLIC", jackie);
-    orphanCrushingMachineInc.releasePayroll(jackie, jackie);
-    orphanCrushingMachineInc.callSecurity(jackie);
+    orphanCrushingMachineInc.corporateOfficePtr->callClient("HYLLLIC", jackie);
+    orphanCrushingMachineInc.corporateOfficePtr->releasePayroll(jackie, jackie);
+    orphanCrushingMachineInc.corporateOfficePtr->callSecurity(jackie);
 
     std::cout << "Welcome " << jackie.name << "! Please report to " << jackie.department << ". Boy, those " << jackie.salary << " dollars are gonna be a lot of money! " << std::endl;
 
     jackie.reportToFirstDay();
 
-    PhoneBook olYellowPages;
+    PhoneBookWrapper olYellowPages( new PhoneBook() );
 
-    olYellowPages.contactInformationDiplay("HYLLLIC INC");
-    olYellowPages.openToRandomPage();
-    olYellowPages.disintigrate();
-    olYellowPages.tearOutPages();
+    olYellowPages.phoneBookPtr->contactInformationDiplay("HYLLLIC INC");
+    olYellowPages.phoneBookPtr->openToRandomPage();
+    olYellowPages.phoneBookPtr->disintigrate();
+    olYellowPages.phoneBookPtr->tearOutPages();
 
-    ElectricHeater heater;
+    ElectricHeaterWrapper heater( new ElectricHeater() );
 
-    heater.produceHeat();
-    heater.triggerCountdownTimer(0.5f);
-    heater.displayCurrentTemperature();
-    heater.setPhonebookOnFire(olYellowPages);
+    heater.electricHeaterPtr->produceHeat();
+    heater.electricHeaterPtr->triggerCountdownTimer(0.5f);
+    heater.electricHeaterPtr->displayCurrentTemperature();
+    heater.electricHeaterPtr->setPhonebookOnFire(*olYellowPages.phoneBookPtr);
 
     ElectricHeater::HeatingElement newCoil;
 
@@ -605,23 +605,23 @@ int main()
     newCoil.slowHeatUp(10);
     newCoil.changeTemperature(80);
 
-    Apartment hollywoodApartment;
+    ApartmentWrapper hollywoodApartment( new Apartment() );
     
-    hollywoodApartment.makeApartmentCozy();
-    hollywoodApartment.swatABugAndRant();
+    hollywoodApartment.apartmentPtr->makeApartmentCozy();
+    hollywoodApartment.apartmentPtr->swatABugAndRant();
     
-    std::cout << "Later that night, after logging off at " << hollywoodApartment.rachel.clockOut(7.00) << " power saving mode was made " << std::boolalpha << (hollywoodApartment.spaceHeater.powerSavingMode = true) << std::endl;
+    std::cout << "Later that night, after logging off at " << hollywoodApartment.apartmentPtr->rachel.clockOut(7.00) << " power saving mode was made " << std::boolalpha << (hollywoodApartment.apartmentPtr->spaceHeater.powerSavingMode = true) << std::endl;
 
-    hollywoodApartment.logOffAndShutDown();
+    hollywoodApartment.apartmentPtr->logOffAndShutDown();
 
-    FieldOffice shorelineFieldOffice;
+    FieldOfficeWrapper shorelineFieldOffice( new FieldOffice() );
     
-    shorelineFieldOffice.meetWithOwner();
-    shorelineFieldOffice.wrapUpWorkDay();
+    shorelineFieldOffice.fieldOfficePtr->meetWithOwner();
+    shorelineFieldOffice.fieldOfficePtr->wrapUpWorkDay();
 
-    std::cout << "The field office is located at " << (shorelineFieldOffice.katastrophe.address = "123 Middle of Nowhere") << std::endl;
+    std::cout << "The field office is located at " << (shorelineFieldOffice.fieldOfficePtr->katastrophe.address = "123 Middle of Nowhere") << std::endl;
 
-    shorelineFieldOffice.defineFieldOfficeAddress("123 Middle of Nowhere");
+    shorelineFieldOffice.fieldOfficePtr->defineFieldOfficeAddress("123 Middle of Nowhere");
     
     //==============================
     std::cout << "good to go!" << std::endl;
