@@ -111,12 +111,12 @@ struct CorporateOffice
         void makeCopies(int numCopies);
         float negotiateRaise(float raiseAmount);
         void reportToFirstDay();
-        JUCE_LEAK_DETECTOR(Employee)
     };
 
-    void callClient(std::string clientName, Employee employee);
-    void releasePayroll(Employee employeeOne, Employee employeeTwo);
-    void callSecurity(Employee securityGuard);
+    void callClient(std::string clientName, const Employee& employee) const;
+    void releasePayroll(Employee& employeeOne, Employee& employeeTwo);
+    void callSecurity(Employee& securityGuard);
+
     JUCE_LEAK_DETECTOR(CorporateOffice)
 };
 
@@ -167,18 +167,18 @@ void CorporateOffice::Employee::makeCopies(int numCopies)
     std::cout << "Now printing " << numCopies << " copies for the " << department << " meeting." << std::endl;
 }
 
-void CorporateOffice::callClient(std::string clientName, Employee employee)
+void CorporateOffice::callClient(std::string clientName, const Employee& employee) const
 {
     std::cout << "Now " << employee.name << " is calling " << clientName << std::endl;
 }
 
-void CorporateOffice::releasePayroll(Employee employeeOne, Employee employeeTwo)
+void CorporateOffice::releasePayroll(Employee& employeeOne, Employee& employeeTwo)
 {
     employeeOne.salary += 4000.f;
     employeeTwo.salary += 4000.f;
 }
 
-void CorporateOffice::callSecurity(Employee securityGuard)
+void CorporateOffice::callSecurity(Employee& securityGuard)
 {
     securityGuard.name = "THE BOSS, NOW";
 }
@@ -199,6 +199,20 @@ void CorporateOffice::Employee::reportToFirstDay()
 {
     std::cout << "Welcome " << this->name << "! Please report to " << this->department << ". Boy, those " << this->salary << " dollars are gonna be a lot of money! " << std::endl;
 }
+
+struct CorporateOfficeWrapper 
+{
+    CorporateOffice* corporateOfficePtr = nullptr;
+    CorporateOfficeWrapper(CorporateOffice* ptrToCorporateOffice) : corporateOfficePtr(ptrToCorporateOffice) 
+    {
+        std::cout << "Wrapping Corporate Office" << std::endl;
+    }
+    ~CorporateOfficeWrapper()
+    {
+        delete corporateOfficePtr;
+        std::cout << "Unwrapping Corporate Office" << std::endl;
+    }
+};
 /*
  copied UDT 2:
  */
@@ -217,6 +231,7 @@ struct PhoneBook
     void openToRandomPage();
     void disintigrate();
     int tearOutPages();
+
     JUCE_LEAK_DETECTOR(PhoneBook)
 };
 
@@ -271,6 +286,20 @@ int PhoneBook::tearOutPages()
     }
     return numberOfPages;
 }
+
+struct PhoneBookWrapper
+{
+    PhoneBook* phoneBookPtr = nullptr;
+    PhoneBookWrapper(PhoneBook* ptrToPhoneBook) : phoneBookPtr(ptrToPhoneBook)
+    {
+       std::cout << "Wrapping Phonebook" << std::endl; 
+    }
+    ~PhoneBookWrapper()
+    {
+        delete phoneBookPtr;
+        std::cout << "Unwrapping Phonebook" << std::endl;
+    }
+};
 /*
  copied UDT 3:
  */
@@ -299,13 +328,13 @@ struct ElectricHeater
         void slowCoolDown(int coolDownTime = 10);
         void slowHeatUp(int heatUpTime = 10);
         void changeTemperature(int newTemperature);
-        JUCE_LEAK_DETECTOR(HeatingElement)
     };
 
     void produceHeat();
     void triggerCountdownTimer(float tippingMovement);
     int displayCurrentTemperature();
-    void setPhonebookOnFire(PhoneBook phoneBookToBurn);
+    void setPhonebookOnFire(PhoneBook& phoneBookToBurn);
+
     JUCE_LEAK_DETECTOR(ElectricHeater)
 };
 
@@ -366,7 +395,7 @@ int ElectricHeater::displayCurrentTemperature()
     return temperatureSetting;
 }
 
-void ElectricHeater::setPhonebookOnFire(PhoneBook phoneBookToBurn)
+void ElectricHeater::setPhonebookOnFire(PhoneBook& phoneBookToBurn)
 {
     phoneBookToBurn.numberOfPages = 8;
     for (; phoneBookToBurn.numberOfPages > 0; --phoneBookToBurn.numberOfPages)
@@ -374,6 +403,20 @@ void ElectricHeater::setPhonebookOnFire(PhoneBook phoneBookToBurn)
         std::cout << "Burning page " << phoneBookToBurn.numberOfPages << std::endl;
     }
 }
+
+struct ElectricHeaterWrapper
+{
+    ElectricHeater* electricHeaterPtr = nullptr;
+    ElectricHeaterWrapper(ElectricHeater* ptrToElectricHeater) : electricHeaterPtr(ptrToElectricHeater)
+    {
+        std::cout << "Wrapping Electric Heater" << std::endl;
+    }
+    ~ElectricHeaterWrapper()
+    {
+        delete electricHeaterPtr;
+        std::cout << "Unwrapping Electric Heater" << std::endl;
+    }
+};
 /*
  new UDT 4:
  with 2 member functions
@@ -390,6 +433,7 @@ struct Apartment
     void makeApartmentCozy();
     void swatABugAndRant();
     void logOffAndShutDown();
+
     JUCE_LEAK_DETECTOR(Apartment)
 };
 
@@ -425,6 +469,20 @@ void Apartment::logOffAndShutDown()
 {
     std::cout << "Later that night, after logging off at " << this->rachel.clockOut(7.00) << " power saving mode was made " << std::boolalpha << (this->spaceHeater.powerSavingMode = true) << std::endl;
 }
+
+struct ApartmentWrapper
+{
+    Apartment* apartmentPtr = nullptr;
+    ApartmentWrapper(Apartment* ptrToApartment) : apartmentPtr(ptrToApartment)
+    {
+        std::cout << "Wrapping Apartment" << std::endl;
+    }
+    ~ApartmentWrapper()
+    {
+        delete apartmentPtr;
+        std::cout << "Unwrapping Apartment" << std::endl;
+    }
+};
 /*
  new UDT 5:
  with 2 member functions
@@ -441,6 +499,7 @@ struct FieldOffice
     void meetWithOwner();
     void wrapUpWorkDay();
     void defineFieldOfficeAddress(std::string newAddress);
+
     JUCE_LEAK_DETECTOR(FieldOffice)
 };
 
@@ -474,6 +533,20 @@ void FieldOffice::defineFieldOfficeAddress(std::string newAddress)
     this->katastrophe.address = newAddress;
     std::cout << "The field office is located at " << newAddress << std::endl;
 }
+
+struct FieldOfficeWrapper
+{
+    FieldOffice* fieldOfficePtr = nullptr;
+    FieldOfficeWrapper(FieldOffice* ptrToFieldOffice) : fieldOfficePtr(ptrToFieldOffice)
+    {
+        std::cout << "Wrapping Field Office" << std::endl;
+    }
+    ~FieldOfficeWrapper()
+    {
+        delete fieldOfficePtr;
+        std::cout << "Unwrapping Field Office" << std::endl;
+    }
+};
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
 
