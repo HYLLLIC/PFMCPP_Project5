@@ -80,6 +80,7 @@ void Axe::aConstMemberFunction() const { }
 
 
 #include <iostream>
+#include "LeakedObjectDetector.h"
 /*
  copied UDT 1:
  */
@@ -105,16 +106,18 @@ struct CorporateOffice
         Employee();
         ~Employee();
 
-        double clockIn(double timeIn);
-        double clockOut(double timeOut);
-        void makeCopies(int numCopies);
+        double clockIn(double timeIn) const;
+        double clockOut(double timeOut) const;
+        void makeCopies(int numCopies) const;
         float negotiateRaise(float raiseAmount);
-        void reportToFirstDay();
+        void reportToFirstDay() const;
     };
 
-    void callClient(std::string clientName, Employee employee);
-    void releasePayroll(Employee employeeOne, Employee employeeTwo);
-    void callSecurity(Employee securityGuard);
+    void callClient(std::string clientName, const Employee& employee) const;
+    void releasePayroll(Employee& employeeOne, Employee& employeeTwo);
+    void callSecurity(Employee& securityGuard);
+
+    JUCE_LEAK_DETECTOR(CorporateOffice)
 };
 
 CorporateOffice::CorporateOffice() :
@@ -147,35 +150,35 @@ CorporateOffice::Employee::~Employee()
     std::cout << "The employee has been fired." << std::endl;
 }
 
-double CorporateOffice::Employee::clockIn(double timeIn)
+double CorporateOffice::Employee::clockIn(double timeIn) const
 {
     std::cout << "Welcome, " << name <<  " it is " << timeIn << "AM" << std::endl;
     return timeIn;
 }
 
-double CorporateOffice::Employee::clockOut(double timeOut)
+double CorporateOffice::Employee::clockOut(double timeOut) const
 {
     //std::cout << "Goodbye, it's " << timeOut << "PM" << std::endl;
     return timeOut;
 }
 
-void CorporateOffice::Employee::makeCopies(int numCopies)
+void CorporateOffice::Employee::makeCopies(int numCopies) const
 {
     std::cout << "Now printing " << numCopies << " copies for the " << department << " meeting." << std::endl;
 }
 
-void CorporateOffice::callClient(std::string clientName, Employee employee)
+void CorporateOffice::callClient(std::string clientName, const Employee& employee) const
 {
     std::cout << "Now " << employee.name << " is calling " << clientName << std::endl;
 }
 
-void CorporateOffice::releasePayroll(Employee employeeOne, Employee employeeTwo)
+void CorporateOffice::releasePayroll(Employee& employeeOne, Employee& employeeTwo)
 {
     employeeOne.salary += 4000.f;
     employeeTwo.salary += 4000.f;
 }
 
-void CorporateOffice::callSecurity(Employee securityGuard)
+void CorporateOffice::callSecurity(Employee& securityGuard)
 {
     securityGuard.name = "THE BOSS, NOW";
 }
@@ -189,13 +192,28 @@ float CorporateOffice::Employee::negotiateRaise(float raiseAmount)
         std::cout << name << " says, how about: " << newSalary << std::endl;
     }
     std::cout << "Fine! Get out of my office!" << std::endl;
+    salary = newSalary;
     return newSalary;
 }
 
-void CorporateOffice::Employee::reportToFirstDay()
+void CorporateOffice::Employee::reportToFirstDay() const
 {
     std::cout << "Welcome " << this->name << "! Please report to " << this->department << ". Boy, those " << this->salary << " dollars are gonna be a lot of money! " << std::endl;
 }
+
+struct CorporateOfficeWrapper 
+{
+    CorporateOffice* corporateOfficePtr = nullptr;
+    CorporateOfficeWrapper(CorporateOffice* ptrToCorporateOffice) : corporateOfficePtr(ptrToCorporateOffice) 
+    {
+        std::cout << "Wrapping Corporate Office" << std::endl;
+    }
+    ~CorporateOfficeWrapper()
+    {
+        delete corporateOfficePtr;
+        std::cout << "Unwrapping Corporate Office" << std::endl;
+    }
+};
 /*
  copied UDT 2:
  */
@@ -210,10 +228,12 @@ struct PhoneBook
     PhoneBook();
     ~PhoneBook();
 
-    std::string contactInformationDiplay(std::string contactName);
-    void openToRandomPage();
+    std::string contactInformationDiplay(std::string contactName) const;
+    void openToRandomPage() const;
     void disintigrate();
     int tearOutPages();
+
+    JUCE_LEAK_DETECTOR(PhoneBook)
 };
 
 PhoneBook::PhoneBook() :
@@ -231,13 +251,13 @@ PhoneBook::~PhoneBook()
     std::cout << "The Phonebook has been thrown away." << std::endl;
 }
 
-std::string PhoneBook::contactInformationDiplay(std::string contactName)
+std::string PhoneBook::contactInformationDiplay(std::string contactName) const
 {
     std::string phoneNumber = contactName + " 555-5555";
     return phoneNumber;
 }
 
-void PhoneBook::openToRandomPage()
+void PhoneBook::openToRandomPage() const
 {
     int min = 1;
     int max = numberOfPages;
@@ -248,6 +268,7 @@ void PhoneBook::openToRandomPage()
 void PhoneBook::disintigrate()
 {
     std::cout << "Uahghghgllll the " << telephoneCompany << " phone book is disintigrating" << std::endl;
+    numberOfPages = 0;
 }
 
 int PhoneBook::tearOutPages()
@@ -265,8 +286,23 @@ int PhoneBook::tearOutPages()
             std::cout << "Tearing out " << pagesToTear << " pages." << std::endl;
         }
     }
+    numberOfPages -= pagesTorn;
     return numberOfPages;
 }
+
+struct PhoneBookWrapper
+{
+    PhoneBook* phoneBookPtr = nullptr;
+    PhoneBookWrapper(PhoneBook* ptrToPhoneBook) : phoneBookPtr(ptrToPhoneBook)
+    {
+       std::cout << "Wrapping Phonebook" << std::endl; 
+    }
+    ~PhoneBookWrapper()
+    {
+        delete phoneBookPtr;
+        std::cout << "Unwrapping Phonebook" << std::endl;
+    }
+};
 /*
  copied UDT 3:
  */
@@ -292,15 +328,17 @@ struct ElectricHeater
         std::string supportType = "Embedded";
         std::string layoutType = "Open Coil";
 
-        void slowCoolDown(int coolDownTime = 10);
-        void slowHeatUp(int heatUpTime = 10);
+        void slowCoolDown(int coolDownTime = 10) const;
+        void slowHeatUp(int heatUpTime = 10) const;
         void changeTemperature(int newTemperature);
     };
 
     void produceHeat();
     void triggerCountdownTimer(float tippingMovement);
-    int displayCurrentTemperature();
-    void setPhonebookOnFire(PhoneBook phoneBookToBurn);
+    int displayCurrentTemperature() const;
+    void setPhonebookOnFire(PhoneBook& phoneBookToBurn);
+
+    JUCE_LEAK_DETECTOR(ElectricHeater)
 };
 
 ElectricHeater::ElectricHeater() :
@@ -324,12 +362,12 @@ ElectricHeater::HeatingElement::~HeatingElement()
     std::cout << "The heating element has been removed." << std::endl;
 }
 
-void ElectricHeater::HeatingElement::slowCoolDown(int coolDownTime)
+void ElectricHeater::HeatingElement::slowCoolDown(int coolDownTime) const
 {
     std::cout << "It's time to cool down, it will take " << layoutType << " coil " << coolDownTime << "seconds to cool down." << std::endl;
 }
 
-void ElectricHeater::HeatingElement::slowHeatUp(int heatUpTime)
+void ElectricHeater::HeatingElement::slowHeatUp(int heatUpTime) const
 {
     std::cout << "It's time to heat up, it will take " << heatUpTime << "seconds" << std::endl;
 }
@@ -354,13 +392,13 @@ void ElectricHeater::triggerCountdownTimer(float tippingMovement)
     }
 }
 
-int ElectricHeater::displayCurrentTemperature()
+int ElectricHeater::displayCurrentTemperature() const
 {
     std::cout << "Current temperature is " << temperatureSetting << std::endl;
     return temperatureSetting;
 }
 
-void ElectricHeater::setPhonebookOnFire(PhoneBook phoneBookToBurn)
+void ElectricHeater::setPhonebookOnFire(PhoneBook& phoneBookToBurn)
 {
     phoneBookToBurn.numberOfPages = 8;
     for (; phoneBookToBurn.numberOfPages > 0; --phoneBookToBurn.numberOfPages)
@@ -368,6 +406,20 @@ void ElectricHeater::setPhonebookOnFire(PhoneBook phoneBookToBurn)
         std::cout << "Burning page " << phoneBookToBurn.numberOfPages << std::endl;
     }
 }
+
+struct ElectricHeaterWrapper
+{
+    ElectricHeater* electricHeaterPtr = nullptr;
+    ElectricHeaterWrapper(ElectricHeater* ptrToElectricHeater) : electricHeaterPtr(ptrToElectricHeater)
+    {
+        std::cout << "Wrapping Electric Heater" << std::endl;
+    }
+    ~ElectricHeaterWrapper()
+    {
+        delete electricHeaterPtr;
+        std::cout << "Unwrapping Electric Heater" << std::endl;
+    }
+};
 /*
  new UDT 4:
  with 2 member functions
@@ -384,6 +436,8 @@ struct Apartment
     void makeApartmentCozy();
     void swatABugAndRant();
     void logOffAndShutDown();
+
+    JUCE_LEAK_DETECTOR(Apartment)
 };
 
 Apartment::Apartment()
@@ -418,6 +472,20 @@ void Apartment::logOffAndShutDown()
 {
     std::cout << "Later that night, after logging off at " << this->rachel.clockOut(7.00) << " power saving mode was made " << std::boolalpha << (this->spaceHeater.powerSavingMode = true) << std::endl;
 }
+
+struct ApartmentWrapper
+{
+    Apartment* apartmentPtr = nullptr;
+    ApartmentWrapper(Apartment* ptrToApartment) : apartmentPtr(ptrToApartment)
+    {
+        std::cout << "Wrapping Apartment" << std::endl;
+    }
+    ~ApartmentWrapper()
+    {
+        delete apartmentPtr;
+        std::cout << "Unwrapping Apartment" << std::endl;
+    }
+};
 /*
  new UDT 5:
  with 2 member functions
@@ -431,9 +499,11 @@ struct FieldOffice
     FieldOffice();
     ~FieldOffice();
 
-    void meetWithOwner();
-    void wrapUpWorkDay();
+    void meetWithOwner() const;
+    void wrapUpWorkDay() const;
     void defineFieldOfficeAddress(std::string newAddress);
+
+    JUCE_LEAK_DETECTOR(FieldOffice)
 };
 
 FieldOffice::FieldOffice()
@@ -449,13 +519,13 @@ FieldOffice::~FieldOffice()
     std::cout << "The field office has been closed, but there are still " << katastrophe.numberOfEmployees << " employees left." << std::endl;
 }
 
-void FieldOffice::meetWithOwner()
+void FieldOffice::meetWithOwner() const
 {
     katastrophe.callClient("The Owner", patrick);
     std::cout << "The morning standup is over, the PM has called the owner." << std::endl;
 }
 
-void FieldOffice::wrapUpWorkDay()
+void FieldOffice::wrapUpWorkDay() const
 {
     patrick.clockOut(19.00);
     std::cout << "The day is over, Patrick the PM has clocked out." << std::endl;
@@ -466,6 +536,20 @@ void FieldOffice::defineFieldOfficeAddress(std::string newAddress)
     this->katastrophe.address = newAddress;
     std::cout << "The field office is located at " << newAddress << std::endl;
 }
+
+struct FieldOfficeWrapper
+{
+    FieldOffice* fieldOfficePtr = nullptr;
+    FieldOfficeWrapper(FieldOffice* ptrToFieldOffice) : fieldOfficePtr(ptrToFieldOffice)
+    {
+        std::cout << "Wrapping Field Office" << std::endl;
+    }
+    ~FieldOfficeWrapper()
+    {
+        delete fieldOfficePtr;
+        std::cout << "Unwrapping Field Office" << std::endl;
+    }
+};
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
 
@@ -483,7 +567,7 @@ void FieldOffice::defineFieldOfficeAddress(std::string newAddress)
 #include <iostream>
 int main()
 {
-    CorporateOffice orphanCrushingMachineInc;
+    CorporateOfficeWrapper orphanCrushingMachineInc( new CorporateOffice() );
 
     CorporateOffice::Employee jackie;
 
@@ -493,27 +577,27 @@ int main()
     jackie.makeCopies(20);
     jackie.negotiateRaise(5000);
 
-    orphanCrushingMachineInc.callClient("HYLLLIC", jackie);
-    orphanCrushingMachineInc.releasePayroll(jackie, jackie);
-    orphanCrushingMachineInc.callSecurity(jackie);
+    orphanCrushingMachineInc.corporateOfficePtr->callClient("HYLLLIC", jackie);
+    orphanCrushingMachineInc.corporateOfficePtr->releasePayroll(jackie, jackie);
+    orphanCrushingMachineInc.corporateOfficePtr->callSecurity(jackie);
 
     std::cout << "Welcome " << jackie.name << "! Please report to " << jackie.department << ". Boy, those " << jackie.salary << " dollars are gonna be a lot of money! " << std::endl;
 
     jackie.reportToFirstDay();
 
-    PhoneBook olYellowPages;
+    PhoneBookWrapper olYellowPages( new PhoneBook() );
 
-    olYellowPages.contactInformationDiplay("HYLLLIC INC");
-    olYellowPages.openToRandomPage();
-    olYellowPages.disintigrate();
-    olYellowPages.tearOutPages();
+    olYellowPages.phoneBookPtr->contactInformationDiplay("HYLLLIC INC");
+    olYellowPages.phoneBookPtr->openToRandomPage();
+    olYellowPages.phoneBookPtr->disintigrate();
+    olYellowPages.phoneBookPtr->tearOutPages();
 
-    ElectricHeater heater;
+    ElectricHeaterWrapper heater( new ElectricHeater() );
 
-    heater.produceHeat();
-    heater.triggerCountdownTimer(0.5f);
-    heater.displayCurrentTemperature();
-    heater.setPhonebookOnFire(olYellowPages);
+    heater.electricHeaterPtr->produceHeat();
+    heater.electricHeaterPtr->triggerCountdownTimer(0.5f);
+    heater.electricHeaterPtr->displayCurrentTemperature();
+    heater.electricHeaterPtr->setPhonebookOnFire(*olYellowPages.phoneBookPtr);
 
     ElectricHeater::HeatingElement newCoil;
 
@@ -521,23 +605,23 @@ int main()
     newCoil.slowHeatUp(10);
     newCoil.changeTemperature(80);
 
-    Apartment hollywoodApartment;
+    ApartmentWrapper hollywoodApartment( new Apartment() );
     
-    hollywoodApartment.makeApartmentCozy();
-    hollywoodApartment.swatABugAndRant();
+    hollywoodApartment.apartmentPtr->makeApartmentCozy();
+    hollywoodApartment.apartmentPtr->swatABugAndRant();
     
-    std::cout << "Later that night, after logging off at " << hollywoodApartment.rachel.clockOut(7.00) << " power saving mode was made " << std::boolalpha << (hollywoodApartment.spaceHeater.powerSavingMode = true) << std::endl;
+    std::cout << "Later that night, after logging off at " << hollywoodApartment.apartmentPtr->rachel.clockOut(7.00) << " power saving mode was made " << std::boolalpha << (hollywoodApartment.apartmentPtr->spaceHeater.powerSavingMode = true) << std::endl;
 
-    hollywoodApartment.logOffAndShutDown();
+    hollywoodApartment.apartmentPtr->logOffAndShutDown();
 
-    FieldOffice shorelineFieldOffice;
+    FieldOfficeWrapper shorelineFieldOffice( new FieldOffice() );
     
-    shorelineFieldOffice.meetWithOwner();
-    shorelineFieldOffice.wrapUpWorkDay();
+    shorelineFieldOffice.fieldOfficePtr->meetWithOwner();
+    shorelineFieldOffice.fieldOfficePtr->wrapUpWorkDay();
 
-    std::cout << "The field office is located at " << (shorelineFieldOffice.katastrophe.address = "123 Middle of Nowhere") << std::endl;
+    std::cout << "The field office is located at " << (shorelineFieldOffice.fieldOfficePtr->katastrophe.address = "123 Middle of Nowhere") << std::endl;
 
-    shorelineFieldOffice.defineFieldOfficeAddress("123 Middle of Nowhere");
+    shorelineFieldOffice.fieldOfficePtr->defineFieldOfficeAddress("123 Middle of Nowhere");
     
     //==============================
     std::cout << "good to go!" << std::endl;
