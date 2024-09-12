@@ -66,6 +66,7 @@ void Axe::aConstMemberFunction() const { }
 
 #include <iostream>
 #include "LeakedObjectDetector.h"
+#include"Wrappers.h"
 /*
  copied UDT 1:
  */
