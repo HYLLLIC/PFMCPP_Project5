@@ -1,4 +1,5 @@
 #include "ElectricHeater.h"
+#include "PhoneBook.h"
 
 ElectricHeater::ElectricHeater() :
 temperatureSetting(72)

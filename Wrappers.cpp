@@ -1,6 +1,4 @@
 #include "Wrappers.h"
-#include "Apartment.h"
-#include "FieldOffice.h"
 
 CorporateOfficeWrapper::CorporateOfficeWrapper(CorporateOffice* ptrToCorporateOffice) : corporateOfficePtr(ptrToCorporateOffice) 
 {
