@@ -1,6 +1,5 @@
 #include "Apartment.h"
 
-
 Apartment::Apartment()
 {
     rachel.negotiateRaise(5000.f);
