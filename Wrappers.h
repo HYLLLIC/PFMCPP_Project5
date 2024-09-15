@@ -1,11 +1,10 @@
 #pragma once
 
-#include "FieldOffice.h"
-
-struct Apartment;
 struct CorporateOffice;
-struct ElectricHeater;
 struct PhoneBook;
+struct ElectricHeater;
+struct Apartment;
+struct FieldOffice;
 
 struct CorporateOfficeWrapper 
 {

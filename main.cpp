@@ -78,9 +78,9 @@ void Axe::aConstMemberFunction() const { }
 #include <iostream>
 #include <string>
 #include "LeakedObjectDetector.h"
-#include "Wrappers.h"
 #include "Apartment.h"
-#include "CorporateOffice.h"
+#include "FieldOffice.h"
+#include "Wrappers.h"
 
 int main()
 {
