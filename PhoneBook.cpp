@@ -37,19 +37,15 @@ void PhoneBook::disintigrate()
 
 int PhoneBook::tearOutPages()
 {
-    int pagesTorn = 0;
-    while (pagesTorn < numberOfPages)
+    while (numberOfPages > 0)
     {
-        int pagesToTear = (numberOfPages - pagesTorn) / 2 + 25;
-        if (pagesTorn + pagesToTear > numberOfPages) 
+        int pagesToTear = (numberOfPages - numberOfPages / 2) + 25;
+        if (pagesToTear > numberOfPages) 
         {
-            pagesTorn = numberOfPages; 
+            pagesToTear = numberOfPages;
         }
-        {
-            pagesTorn += pagesToTear;
-            std::cout << "Tearing out " << pagesToTear << " pages." << std::endl;
-        }
+        numberOfPages -= pagesToTear;
+        std::cout << "Tearing out " << pagesToTear << " pages." << std::endl;
     }
-    numberOfPages -= pagesTorn;
     return numberOfPages;
 }

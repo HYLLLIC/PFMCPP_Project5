@@ -68,7 +68,7 @@ float CorporateOffice::Employee::negotiateRaise(float raiseAmount)
     float newSalary(salary);
     while (newSalary < salary + raiseAmount)
     {
-        newSalary+=(raiseAmount*.25f);
+        newSalary += (raiseAmount * .25f);
         std::cout << name << " says, how about: " << newSalary << std::endl;
     }
     std::cout << "Fine! Get out of my office!" << std::endl;
